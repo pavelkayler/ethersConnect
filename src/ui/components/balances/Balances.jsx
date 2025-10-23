@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 
 const Balances = () => {
-  const { getBalance, wallet } = useContext(Context);
+  const { getBalance } = useContext(Context);
   const [balances, setBalances] = useState([0, 0, 0, 0]);
   const [showCard, setShowCard] = useState(false);
 
@@ -39,7 +39,7 @@ const Balances = () => {
                 name="address"
                 type="text"
                 placeholder="0x0000000000000000000000000000000000000000"
-                defaultValue="0x456155B4ade50Bfa8De235B672D9F190482021A2"
+                defaultValue="0x5f94B09332a2236D748D26E78500d35a1C75F151"
               ></FormControl>
             </FormGroup>
             <Button type="submit" className="m-3">
@@ -48,7 +48,7 @@ const Balances = () => {
           </Form>
           {showCard && (
             <Card>
-              <Card.Title>Балансы</Card.Title>
+              <CardTitle>Балансы</CardTitle>
               <Card.Body>
                 <Card.Text>
                   <ListGroup>

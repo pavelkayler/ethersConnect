@@ -11,10 +11,14 @@ import { Context } from "../../../core/context/Context.jsx";
 
 const StakingInfo = () => {
   const { getStakingInfo } = useContext(Context);
-  const [stakingInfo, setStakingInfo] = useState({});
+  const [stakingInfo, setStakingInfo] = useState([]);
 
   useEffect(() => {
-    setStakingInfo(getStakingInfo());
+    (async () => {
+      const log = await getStakingInfo();
+      console.log(log);
+      setStakingInfo(log);
+    })();
   }, []);
 
   return (
@@ -24,15 +28,17 @@ const StakingInfo = () => {
         <CardBody>
           <ListGroup>
             <ListGroupItem>
-              Общее количество PROFI: {stakingInfo[0]}
+              Общее количество PROFI: {stakingInfo[0]?.toString() || 0}
             </ListGroupItem>
             <ListGroupItem>
-              Количество застейканных PROFI: {stakingInfo[1]}
+              Количество застейканных PROFI: {stakingInfo[1]?.toString() || 0}
             </ListGroupItem>
             <ListGroupItem>
-              Последнее время сбора награды: {stakingInfo[3]}
+              Последнее время сбора награды: {stakingInfo[3]?.toString() || 0}
             </ListGroupItem>
-            <ListGroupItem>Доступная награда: {stakingInfo[2]}</ListGroupItem>
+            <ListGroupItem>
+              Доступная награда: {stakingInfo[2]?.toString() || 0}
+            </ListGroupItem>
           </ListGroup>
         </CardBody>
       </Card>
