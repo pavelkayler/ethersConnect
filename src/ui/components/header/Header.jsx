@@ -1,9 +1,10 @@
-import { Button } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { Context } from "../../../core/context/Context.jsx";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-  const { connect, signer } = useContext(Context);
+  const { wallet } = useContext(Context);
 
   return (
     <>
@@ -14,17 +15,59 @@ const Header = () => {
           height: "8vh",
         }}
       >
-        <h1>ПРОФЕССИОНАЛЫ 2026</h1>
-        <Button onClick={connect}>ПОДКЛЮЧИТЬ METAMASK</Button>
-        <Button
-          variant={"outline-info"}
-          onClick={() => {
-            console.log("Current Signer.Address: " + signer.address);
-            alert("Current Signer.Address: " + signer.address);
-          }}
-        >
-          ПОЛУЧИТЬ АДРЕС ТЕКУЩЕГО ПОЛЬЗОВАТЕЛЯ
-        </Button>
+        <h1 className="text-white fw-semibold text-decoration-none m-2">
+          <Link to="/" className="text-white fw-bold text-decoration-none m-2">
+            Профессионалы 2026
+          </Link>
+        </h1>
+        {wallet !== null ? (
+          <Navbar bg="rebeccapurple">
+            <Container>
+              <Link
+                to="/"
+                className="text-white fw-bold text-decoration-none m-2"
+              >
+                Главная
+              </Link>
+              <Nav>
+                <Link
+                  to="/pools"
+                  className="text-white fw-bold text-decoration-none m-2"
+                >
+                  Пулы
+                </Link>
+
+                <Link
+                  to="/staking"
+                  className="text-white fw-bold text-decoration-none m-2"
+                >
+                  Стакинг
+                </Link>
+                <Link
+                  to="/pool"
+                  className="text-white fw-bold text-decoration-none m-2"
+                >
+                  Роутер
+                </Link>
+                <Link
+                  to="/mainPage"
+                  className="text-white fw-bold text-decoration-none m-2"
+                >
+                  Личный кабинет
+                </Link>
+              </Nav>
+            </Container>
+            <Button
+              onClick={() => {
+                console.log(wallet);
+              }}
+            >
+              account
+            </Button>
+          </Navbar>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

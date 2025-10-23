@@ -4,26 +4,31 @@ import abi from "../../services/abi.json";
 
 const Context = createContext({});
 const ContextProvider = ({ children }) => {
-  const contractAddress = "0xaB71886BFDC05E794Ac5aB087FDB39355eB1146A";
-  const [signer, setSigner] = useState("");
-  const [wallet, setWallet] = useState("");
-  const [readContract, setReadContract] = useState("");
-  const [writeContract, setWriteContract] = useState("");
+  const contractAddress = "0xF56dd5D7d9d7c1F231994aD7F3334529d80434B9";
+  const [readContract, setReadContract] = useState(null);
+  const [writeContract, setWriteContract] = useState(null);
+  const [poolData, setPoolData] = useState(null);
+
+  const [wallet, setWallet] = useState(null);
+  const [account, setAccount] = useState(null);
 
   async function connect() {
     const provider = new ethers.BrowserProvider(window.ethereum);
+
     const signer = await provider.getSigner();
+    const account = await signer.getAddress();
+    setAccount(account);
+
     // prettier-ignore
-    const readContract = await new ethers.Contract(contractAddress, abi, provider,);
+    const readContract = await new ethers.Contract(contractAddress, abi, provider);
     const writeContract = await readContract.connect(signer);
 
     setReadContract(readContract);
     setWriteContract(writeContract);
-    setSigner(signer);
     setWallet(signer.address);
 
-    console.log("Current Wallet: " + wallet);
     alert("Connected!");
+    console.log("Current Wallet: " + signer.address);
   }
 
   async function getBalance(address) {
@@ -36,19 +41,29 @@ const ContextProvider = ({ children }) => {
 
   async function getStakingInfo() {
     try {
-      return await readContract.getStakingInfo();
+      return await readContract.getStakingInfo(wallet);
     } catch (error) {
       console.log(error);
     }
   }
 
+  async function getAllPools() {
+    try {
+      return await readContract.getAllPools();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getPoolInfo() {}
+
   const values = {
-    signer,
     wallet,
-    setWallet,
     connect,
     getBalance,
     getStakingInfo,
+    getAllPools,
+    getPoolInfo,
   };
 
   return <Context.Provider value={values}>{children}</Context.Provider>;
