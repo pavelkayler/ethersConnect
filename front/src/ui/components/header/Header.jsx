@@ -1,7 +1,10 @@
 import { Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../../../core/context/Context.jsx";
 
 const Header = () => {
+  const { wallet } = useContext(Context);
   return (
     <>
       <div
@@ -15,12 +18,25 @@ const Header = () => {
         <Navbar>
           <Nav>
             <Link to="/">
-              <h1 className="text-white">Профессионалы 2026</h1>
+              <h1>Профессионалы 2026</h1>
             </Link>
           </Nav>
           <Nav>
             <Link to="/pools">POOLS</Link>
           </Nav>
+          {wallet !== null ? (
+            <>
+              <Nav>
+                <Link to="/pools">POOLS</Link>
+              </Nav>
+              <Nav>
+                <Link to="/pools">POOLS</Link>
+              </Nav>
+              <Nav>
+                <Link to="/pools">POOLS</Link>
+              </Nav>
+            </>
+          ) : null}
         </Navbar>
       </div>
     </>

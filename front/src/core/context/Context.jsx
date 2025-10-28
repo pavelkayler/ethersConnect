@@ -1,51 +1,51 @@
-import { createContext, useState } from "react";
+import { createContext, useRef, useState } from "react";
 import { ethers } from "ethers";
 import abi from "/src/services/factoryMethods/abi.json";
-import { getPools } from "../../services/factoryMethods/FactoryMethods.js";
+
+const contractAddress = "0x4A973e0c1CA9a42382510287b7d410E72f8baFd7";
 
 const Context = createContext({});
 const ContextProvider = ({ children }) => {
-  const contractAddress = "0x4A973e0c1CA9a42382510287b7d410E72f8baFd7";
-  const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
-  const [readContract, setReadContract] = useState(null);
-  const [writeContract, setWriteContract] = useState(null);
-  const [poolData, setPoolData] = useState([]);
+  const rpcProvider = useRef();
+  const browserProvider = useRef();
+  const signer = useRef();
+  const readContract = useRef();
+  const writeContract = useRef();
+
+  const [wallet, setWallet] = useState(null);
 
   async function connect() {
-    console.log("connecting");
-    const provider = await new ethers.BrowserProvider(window.ethereum);
-    setProvider(provider);
-    //prettier-ignore
-    const readContract = await new ethers.Contract(contractAddress, abi, provider);
-    setReadContract(readContract);
-    console.log("Done!");
-    console.log(readContract);
+    if (!rpcProvider.current) {
+      //prettier-ignore
+      rpcProvider.current = new ethers.JsonRpcProvider("http://localhost:8545");
+    }
+
+    if (!readContract.current) {
+      //prettier-ignore
+      readContract.current = new ethers.Contract(contractAddress, abi, rpcProvider.current);
+    }
   }
 
   async function connectWallet() {
-    console.log("Connect Wallet");
-    const signer = await provider.getSigner();
-    setSigner(signer);
-    const writeContract = await readContract.connect(signer);
-    setWriteContract(writeContract);
-    console.log(writeContract);
+    // await window.ethereum.request({method: "eth_requestAccounts"});
+    browserProvider.current = await new ethers.BrowserProvider(window.ethereum);
+    signer.current = await browserProvider.current.getSigner();
+    //prettier-ignore
+    writeContract.current = new ethers.Contract(contractAddress, abi, signer.current);
+    setWallet(await signer.current.getAddress());
+    console.log(await signer.current.getAddress());
   }
 
-  const getPool = async () => {
-    await getPools(readContract).then((data) => {
-      setPoolData(data);
-    });
-  };
+  const read = () => readContract.current;
+  const write = () => writeContract.current;
 
   const values = {
     connect,
     connectWallet,
-    readContract,
-    writeContract,
-    signer,
-    getPool,
-    poolData,
+    read,
+    write,
+    contractAddress,
+    wallet,
   };
 
   return <Context.Provider value={values}>{children}</Context.Provider>;

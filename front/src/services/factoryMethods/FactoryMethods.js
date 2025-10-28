@@ -1,22 +1,22 @@
-export async function swapToken(readContract, countToken, A) {
+export async function swapToken(contract, countToken, A) {
   try {
-    return await readContract.swapToken(countToken, A);
+    return await contract.swapToken(countToken, A);
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function supportLiquidity(readContract, countToken, A) {
+export async function supportLiquidity(contract, countToken, A) {
   try {
-    return await readContract.supportLiquidity(countToken, A);
+    return await contract.supportLiquidity(countToken, A);
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getPools(readContract) {
+export async function getPools(contract) {
   try {
-    return await readContract.getPools();
+    return await contract.getPools();
   } catch (error) {
     console.log(error);
   }

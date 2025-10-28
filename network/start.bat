@@ -1,0 +1,1 @@
+start geth --datadir "" --dev --http --http.api eth,web3,net --http.port 8545 --http.corsdomain "*" console
