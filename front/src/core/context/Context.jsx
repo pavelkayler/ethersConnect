@@ -1,8 +1,10 @@
 import { createContext, useRef, useState } from "react";
 import { ethers } from "ethers";
-import abi from "/src/services/factoryMethods/abi.json";
+import abi from "/src/services/factoryMethods/factoryAbi.json";
+import stakingAbi from "/src/services/stakingMethods/stakingAbi.json";
 
-const contractAddress = "0x4A973e0c1CA9a42382510287b7d410E72f8baFd7";
+const contractAddress = "0x3568Bf65347c2c6f7BF1e51B69733b5dC17431E1";
+const stakingAddress = "0x1cBd128c00DAB645484E5B140e86CCd46a5C6167";
 
 const Context = createContext({});
 const ContextProvider = ({ children }) => {
@@ -11,17 +13,16 @@ const ContextProvider = ({ children }) => {
   const signer = useRef();
   const readContract = useRef();
   const writeContract = useRef();
+  const stakingWriteContract = useRef();
 
   const [wallet, setWallet] = useState(null);
 
   async function connect() {
     if (!rpcProvider.current) {
-      //prettier-ignore
       rpcProvider.current = new ethers.JsonRpcProvider("http://localhost:8545");
     }
 
     if (!readContract.current) {
-      //prettier-ignore
       readContract.current = new ethers.Contract(contractAddress, abi, rpcProvider.current);
     }
   }
@@ -30,20 +31,25 @@ const ContextProvider = ({ children }) => {
     // await window.ethereum.request({method: "eth_requestAccounts"});
     browserProvider.current = await new ethers.BrowserProvider(window.ethereum);
     signer.current = await browserProvider.current.getSigner();
-    //prettier-ignore
     writeContract.current = new ethers.Contract(contractAddress, abi, signer.current);
+    stakingWriteContract.current = new ethers.Contract(stakingAddress, stakingAbi, signer.current);
     setWallet(await signer.current.getAddress());
-    console.log(await signer.current.getAddress());
   }
 
-  const read = () => readContract.current;
-  const write = () => writeContract.current;
+  const getProvider = () => browserProvider.current;
+  const getRead = () => readContract.current;
+  const getWrite = () => writeContract.current;
+  const getSigner = () => signer.current;
+  const getStakingWriteContract = () => stakingWriteContract.current;
 
   const values = {
     connect,
     connectWallet,
-    read,
-    write,
+    getProvider,
+    getRead,
+    getWrite,
+    getSigner,
+    getStakingWriteContract,
     contractAddress,
     wallet,
   };

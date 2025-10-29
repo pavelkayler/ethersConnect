@@ -22,18 +22,19 @@ const Header = () => {
             </Link>
           </Nav>
           <Nav>
-            <Link to="/pools">POOLS</Link>
+            <Link to="/pools">Пулы</Link>
           </Nav>
+
           {wallet !== null ? (
             <>
               <Nav>
-                <Link to="/pools">POOLS</Link>
+                <Link to="/cabinet">Личный кабинет</Link>
               </Nav>
               <Nav>
-                <Link to="/pools">POOLS</Link>
+                <Link to="/staking">Стэкинг</Link>
               </Nav>
               <Nav>
-                <Link to="/pools">POOLS</Link>
+                <Link to="/pools">peeps</Link>
               </Nav>
             </>
           ) : null}
