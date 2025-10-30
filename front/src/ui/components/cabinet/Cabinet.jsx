@@ -23,21 +23,21 @@ const Cabinet = () => {
   }, []);
 
   return (
-    <>
-      <Card>
+    <div className="d-flex justify-content-center align-items-center m-2">
+      <Card className="m-3 p-3">
         <CardTitle>Балансы</CardTitle>
         <CardBody>
           <ListGroup>
             <ListGroupItem>Адрес пользователя: {signer}</ListGroupItem>
-            <ListGroupItem>Баланс в эфире: {Number(etherBalance) / 10 ** 18}</ListGroupItem>
-            <ListGroupItem>Баланс GERDA {Number(balances[0]) / 10 ** 12}</ListGroupItem>
+            <ListGroupItem>Баланс ETH: {Number(etherBalance) / 10 ** 18}</ListGroupItem>
+            <ListGroupItem>Баланс GERDA: {Number(balances[0]) / 10 ** 12}</ListGroupItem>
             <ListGroupItem>Баланс KRENDEL: {Number(balances[1]) / 10 ** 12}</ListGroupItem>
             <ListGroupItem>Баланс RTK: {Number(balances[2]) / 10 ** 12}</ListGroupItem>
             <ListGroupItem>Баланс LP: {Number(balances[3]) / 10 ** 12}</ListGroupItem>
           </ListGroup>
         </CardBody>
       </Card>
-    </>
+    </div>
   );
 };
 
